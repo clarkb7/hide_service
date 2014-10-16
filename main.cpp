@@ -90,8 +90,8 @@ VOID hs_do_unlink_svc()
     if (!hs_unlink_svc(hServices, my_svc_entry))
         goto fail;
 end:
-    _tprintf(TEXT("%s %s from the service record list.\n"), 
-             (error) ? TEXT("Failed to unlink") : TEXT("Sucessfully unlinked"), 
+    _tprintf(TEXT("%s %s from the service record list.\n"),
+             (error) ? TEXT("Failed to unlink") : TEXT("Sucessfully unlinked"),
              hs_szSvcName);
     return;
 fail:
@@ -205,10 +205,10 @@ LPVOID hs_find_svc_record_list(HANDLE hServices)
                         goto fail;
                     }
                     // Check magic number
-					UnmapViewOfFile(file_view);
-					if (tmp_buf == 0x76724573/*sErv*/) {
+                    UnmapViewOfFile(file_view);
+                    if (tmp_buf == 0x76724573/*sErv*/) {
                         return ret;
-					}
+                    }
                 }
             }
         }
@@ -232,12 +232,12 @@ HS_LPSVC_ENTRY hs_find_svc_entry(HANDLE hServices, LPVOID svc_record_list)
     // Find the service entry with specified name
     do {
         // Read svc_name ptr
-        if (!ReadProcessMemory(hServices, ((LPDWORD)lpsvc_entry)+2, 
+        if (!ReadProcessMemory(hServices, ((LPDWORD)lpsvc_entry)+2,
                                &lpsvc_name, 4, &bytes_read) || bytes_read != 4) {
             return NULL;
         }
         // Read svc_name
-        if (!ReadProcessMemory(hServices, lpsvc_name, 
+        if (!ReadProcessMemory(hServices, lpsvc_name,
                                svc_name, HS_MAX_LEN_SVC_NAME, &bytes_read) || bytes_read != HS_MAX_LEN_SVC_NAME) {
             return NULL;
         }
@@ -246,7 +246,7 @@ HS_LPSVC_ENTRY hs_find_svc_entry(HANDLE hServices, LPVOID svc_record_list)
             return lpsvc_entry;
         }
         // Go to next entry
-    } while (lpsvc_entry != NULL && 
+    } while (lpsvc_entry != NULL &&
               ReadProcessMemory(hServices, ((LPDWORD)lpsvc_entry)+1, &lpsvc_entry, 4, &bytes_read) &&
              bytes_read == 4);
     return NULL;
